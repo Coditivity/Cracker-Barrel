@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\GameScript.cs" />
      <Compile Include="Assets\Scripts\Hole.cs" />
      <Compile Include="Assets\Scripts\HoleAndPegSpawner.cs" />
+     <Compile Include="Assets\Scripts\HoleAnimator.cs" />
      <Compile Include="Assets\Scripts\Peg.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

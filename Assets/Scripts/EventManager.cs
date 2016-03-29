@@ -8,7 +8,9 @@ public class EventManager : MonoBehaviour {
 
     //public delegate void RayHitDetector(RaycastHit hit);
     public delegate void RayHitDetector(Peg peg);
+    public delegate void HoleMouseDetector(Hole hole);
     public event RayHitDetector RayHitDetection;
+    public event HoleMouseDetector HoleMouseDetection;
 
     public static EventManager instance
     {
@@ -36,6 +38,14 @@ public class EventManager : MonoBehaviour {
             instance.RayHitDetection(peg);
         }
 
+    }
+
+    public static void OnHoleMouseDetection(Hole hole)
+    {
+        if (instance.HoleMouseDetection != null)
+        {
+            instance.HoleMouseDetection(hole);
+        }
     }
 
    

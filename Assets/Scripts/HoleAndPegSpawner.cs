@@ -9,7 +9,7 @@ public class HoleAndPegSpawner : MonoBehaviour
     Peg[] pegs;    
     Hole[][] holesRowColumn;
     public GameObject peg;
-    int difficulty = 2;
+    int difficulty = 0;
 
     // Use this for initialization
     void Start()
@@ -53,10 +53,11 @@ public class HoleAndPegSpawner : MonoBehaviour
                         - yDifference * getRowNumber(i);
                     Vector3 holePosition = new Vector3(xPosition, yPosition, cornerHoles[0].transform.position.z);
 
-
-                    holes[i] = new Hole((GameObject)Instantiate(cornerHoles[0]
-                        , holePosition, cornerHoles[0].transform.rotation), true
-                        , getRowNumber(i), getColumnNumber(i));
+                    GameObject hole = (GameObject)Instantiate(cornerHoles[0]
+                        , holePosition, cornerHoles[0].transform.rotation);
+                    hole.AddComponent<HoleAnimator>();
+                    holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
+                    
                 }
                 if (i != 0)
                 {
@@ -119,9 +120,10 @@ public class HoleAndPegSpawner : MonoBehaviour
                     float yPosition = cornerHoles[0].transform.position.y
                         - yDifference * getRowNumber(i);
                     Vector3 holePosition = new Vector3(xPosition, yPosition, cornerHoles[0].transform.position.z);
-                    holes[i] = new Hole((GameObject)Instantiate(cornerHoles[0]
-                        , holePosition, cornerHoles[0].transform.rotation), true
-                        , getRowNumber(i), getColumnNumber(i));
+                    GameObject hole = (GameObject)Instantiate(cornerHoles[0]
+                       , holePosition, cornerHoles[0].transform.rotation);
+                    hole.AddComponent<HoleAnimator>();
+                    holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
                 }
                 if (i != 4)
                 {
@@ -182,9 +184,12 @@ public class HoleAndPegSpawner : MonoBehaviour
                     float yPosition = cornerHoles[0].transform.position.y
                         - yDifference * getRowNumber(i);
                     Vector3 holePosition = new Vector3(xPosition, yPosition, cornerHoles[0].transform.position.z);
-                    holes[i] = new Hole((GameObject)Instantiate(cornerHoles[0]
-                        , holePosition, cornerHoles[0].transform.rotation), true
-                        , getRowNumber(i), getColumnNumber(i));
+
+
+                    GameObject hole = (GameObject)Instantiate(cornerHoles[0]
+                       , holePosition, cornerHoles[0].transform.rotation);
+                    hole.AddComponent<HoleAnimator>();
+                    holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
                 }
                 if (i != 4)
                 {
@@ -209,7 +214,7 @@ public class HoleAndPegSpawner : MonoBehaviour
 
     }
 
-    private int calculateHoleCount(int sideHoleCount)
+    public int calculateHoleCount(int sideHoleCount)
     {
         return sideHoleCount * (sideHoleCount + 1) / 2;
     }
@@ -251,16 +256,29 @@ public class HoleAndPegSpawner : MonoBehaviour
         return holeIndex - firstInRow;
     }
 
-    public Hole[] getHoles()
+    public Hole GetHole(int row, int column)
     {
-        return holes;
+        int numRows = getSideHoleCount();
+        if (row >= 0 && row < numRows)
+        {
+            if (column >= 0 && column <= row)
+            {                
+                return holesRowColumn[row][column];
+            }
+        }
+        return null;
+    }
+
+    public void RemovePeg(int pegIndex)
+    {
+        pegs[pegIndex].Remove();
     }
 
     public Peg[] getPegs()
     {
         return pegs;
     }
-    private int getSideHoleCount()
+    public int getSideHoleCount()
     {
         return 4 + difficulty;
     }
@@ -270,10 +288,9 @@ public class HoleAndPegSpawner : MonoBehaviour
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
-        {
+        int holeCount = calculateHoleCount(getSideHoleCount());
+        if (Physics.Raycast(ray, out hit))        {            
             
-            int holeCount = calculateHoleCount(getSideHoleCount());
             for (int i = 0; i < holeCount; i++)
             {
                 if (pegs[i] != null)
@@ -283,8 +300,16 @@ public class HoleAndPegSpawner : MonoBehaviour
                         EventManager.OnRayHitDetecion(pegs[i]);
                     }
                 }
-            }
-                
+                if (hit.collider.name == holes[i].ColliderName)
+                {
+                    if (!holes[i].hasPeg)
+                    {
+                        
+                        EventManager.OnHoleMouseDetection(holes[i]);
+                    }
+                }
+            }                
         }
+        
     }
 }
