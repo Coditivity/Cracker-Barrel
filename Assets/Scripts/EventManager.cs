@@ -6,7 +6,8 @@ public class EventManager : MonoBehaviour {
 
     private static EventManager eventManager;
 
-    public delegate void RayHitDetector(RaycastHit hit);
+    //public delegate void RayHitDetector(RaycastHit hit);
+    public delegate void RayHitDetector(Peg peg);
     public event RayHitDetector RayHitDetection;
 
     public static EventManager instance
@@ -29,10 +30,10 @@ public class EventManager : MonoBehaviour {
     
     }
 
-    public static void OnRayHitDetecion(RaycastHit hit){
+    public static void OnRayHitDetecion(Peg peg){
         if (instance.RayHitDetection != null)
         {
-            instance.RayHitDetection(hit);
+            instance.RayHitDetection(peg);
         }
 
     }

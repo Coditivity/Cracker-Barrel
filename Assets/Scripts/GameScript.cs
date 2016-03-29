@@ -22,9 +22,13 @@ public class GameScript : MonoBehaviour {
 
 	}
 
+    private void IfPegMovable()
+    {
 
-    void OnRayHitDetection(RaycastHit hit) {
+    }
 
-        
+    void OnRayHitDetection(Peg peg) {
+
+        Debug.Log("hit " + peg.hole.Row + " " + peg.hole.Column);
     }
 }
