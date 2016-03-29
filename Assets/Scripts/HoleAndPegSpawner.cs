@@ -20,6 +20,7 @@ public class HoleAndPegSpawner : MonoBehaviour
 
         Spawned = false;
         gameOverPanel.SetActive(false);
+        gameWinPanel.SetActive(false);
     }
 
     public void GameOver()
