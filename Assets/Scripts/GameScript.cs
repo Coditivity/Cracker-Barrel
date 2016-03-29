@@ -30,6 +30,10 @@ public class GameScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (!spawner.Spawned)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
            
@@ -54,7 +58,7 @@ public class GameScript : MonoBehaviour {
 
         if (!movesLeft)
         {
-            Debug.Log("game Over");
+            spawner.GameOver();
         }
         
   

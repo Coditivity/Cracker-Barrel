@@ -1,20 +1,58 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class HoleAndPegSpawner : MonoBehaviour
 {
 
+    public GameObject MenuPanel, gameOverPanel;
     public GameObject[] cornerHoles;
     Hole[] holes;
     Peg[] pegs;    
     Hole[][] holesRowColumn;
     public GameObject peg;
-    int difficulty = 0;
+    static int difficulty = 0;
+    public bool Spawned { get; private set; }
 
     // Use this for initialization
     void Start()
     {
 
+        Spawned = false;
+        gameOverPanel.SetActive(false);
+    }
+
+    public void GameOver()
+    {
+        gameOverPanel.SetActive(true);
+    }
+    public void EasyClick()
+    {
+        difficulty = 0;
+        SpawnObjects();
+        MenuPanel.SetActive(false);
+    }
+
+    public void MediumClick()
+    {
+        difficulty = 1;
+        SpawnObjects();
+        MenuPanel.SetActive(false);
+    }
+    public void HardClick()
+    {
+        difficulty = 2;
+        SpawnObjects();
+        MenuPanel.SetActive(false);
+    }
+
+    public void MenuClick()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
+    }
+    private void SpawnObjects()
+    {
         if (difficulty == 0)
         {
             int holeCount = calculateHoleCount(4);
@@ -30,7 +68,7 @@ public class HoleAndPegSpawner : MonoBehaviour
             holes[holes.Length - 4] = new Hole(cornerHoles[1], true, 3, 0);
             holes[holes.Length - 1] = new Hole(cornerHoles[2], true, 3, 3);
 
-            
+
             for (int i = 0; i < holeCount; i++)
             {
 
@@ -43,7 +81,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                     float yDifference = (cornerHoles[0].transform.position.y
                         - cornerHoles[1].transform.position.y) / 3;
                     float xPositionLeft = cornerHoles[0].transform.position.x
-                        - xDifference * getRowNumber( i);
+                        - xDifference * getRowNumber(i);
                     float xPositionRight = cornerHoles[0].transform.position.x
                         + xDifference * getRowNumber(i);
                     float xDifferenceActual = (xPositionRight - xPositionLeft)
@@ -57,7 +95,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                         , holePosition, cornerHoles[0].transform.rotation);
                     hole.AddComponent<HoleAnimator>();
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
-                    
+
                 }
                 if (i != 0)
                 {
@@ -77,9 +115,9 @@ public class HoleAndPegSpawner : MonoBehaviour
                     holes[i].hasPeg = false;
                 }
 
-               
+
                 holesRowColumn[getRowNumber(i)][getColumnNumber(i)] = holes[i];
-                
+
             }
 
         }
@@ -142,7 +180,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                     holes[i].hasPeg = false;
                 }
 
-               holesRowColumn[getRowNumber(i)][getColumnNumber(i)] = holes[i];
+                holesRowColumn[getRowNumber(i)][getColumnNumber(i)] = holes[i];
 
             }
         }
@@ -212,8 +250,8 @@ public class HoleAndPegSpawner : MonoBehaviour
             }
         }
 
+        Spawned = true;
     }
-
     public int calculateHoleCount(int sideHoleCount)
     {
         return sideHoleCount * (sideHoleCount + 1) / 2;
