@@ -258,7 +258,7 @@ public class HoleAndPegSpawner : MonoBehaviour {
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            Debug.Log(hit.collider.name);
+            EventManager.OnRayHitDetecion(hit);
         }
 	}
 }

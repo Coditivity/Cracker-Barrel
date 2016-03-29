@@ -10,6 +10,8 @@ public class Peg  {
     {
         this.id = id;
         this.peg = peg;
+        peg.GetComponent<Collider>().name = "PC" + id.ToString();
+
     }
 
     public GameObject GetPeg()
