@@ -26,10 +26,16 @@ public class GameScript : MonoBehaviour {
         movableHoles = new Hole[6];
         pegRemoveX = dummyXPosObject.transform.position.x;
 	}
-	
+
+    float sinceTime = 0;
 	// Update is called once per frame
 	void Update () {
-
+        sinceTime += Time.deltaTime;
+        if (sinceTime >= 180)
+        {
+            spawner.GameOver();
+            return;
+        }
         if (!spawner.Spawned)
         {
             return;
@@ -45,12 +51,14 @@ public class GameScript : MonoBehaviour {
         int pegCount = spawner.getPegs().Length;
         Peg[] pegs = spawner.getPegs();
         bool movesLeft = false;
+        int validPegs = 0;
         for (int i = 0; i < pegCount; i++)
         {
             if (pegs[i] != null )                
             {
                 if (pegs[i].IsValid())
                 {
+                    validPegs++;
                     movesLeft |= TryGetViableMoves(pegs[i]);
                 }
             }
@@ -58,8 +66,16 @@ public class GameScript : MonoBehaviour {
 
         if (!movesLeft)
         {
-            spawner.GameOver();
+            if (validPegs == 1)
+            {
+                spawner.GameWin();
+            }
+            else
+            {
+                spawner.GameOver();
+            }
         }
+        
         
   
 	}

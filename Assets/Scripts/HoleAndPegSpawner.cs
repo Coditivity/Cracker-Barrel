@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class HoleAndPegSpawner : MonoBehaviour
 {
 
-    public GameObject MenuPanel, gameOverPanel;
+    public GameObject MenuPanel, gameOverPanel, gameWinPanel;
     public GameObject[] cornerHoles;
     Hole[] holes;
     Peg[] pegs;    
@@ -25,6 +25,10 @@ public class HoleAndPegSpawner : MonoBehaviour
     public void GameOver()
     {
         gameOverPanel.SetActive(true);
+    }
+    public void GameWin()
+    {
+        gameWinPanel.SetActive(true);
     }
     public void EasyClick()
     {
