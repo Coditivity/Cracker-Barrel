@@ -27,9 +27,10 @@ public class GameScript : MonoBehaviour {
 
         movableHoles = new Hole[6];
         pegRemoveX = dummyXPosObject.transform.position.x;
+        sinceTime = 0;
 	}
 
-    float sinceTime = 0;
+    public static float sinceTime ;
 	// Update is called once per frame
 	void Update () {        
         
@@ -106,8 +107,7 @@ public class GameScript : MonoBehaviour {
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("selected peg " + selectedPeg);
-            Debug.Log("nummovalbe" + movableHolesCount);
+            
             if (selectedPeg != null)
             {
                 TryGetViableMoves(selectedPeg);

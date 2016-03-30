@@ -10,6 +10,7 @@ public class SaveDataManager : MonoBehaviour {
     bool saveDataAvailable;
     string[] loadedData;
     private static SaveDataManager manager;
+    bool hasDataToWrite;
     private static SaveDataManager instance
     {
         get
@@ -37,20 +38,22 @@ public class SaveDataManager : MonoBehaviour {
     }
     private void Init()    {
 
-       /* fileName = Application.persistentDataPath
+        fileName = Application.persistentDataPath
                + Path.DirectorySeparatorChar
-               + "moveList.txt";*/
-        fileName = "C:/Users/MY GIGABYTE/data.txt";
+               + "moveList.txt";
+        //fileName = "C:/Users/MY GIGABYTE/data.txt";
         builder = new StringBuilder();
         if (File.Exists(fileName))
         {
             saveDataAvailable = true;
             loadedData = File.ReadAllLines(fileName);
         }
+        hasDataToWrite = false;
     }
 
     public static void AddPlayerMove(Hole startingHole, Hole endingHole, float time, Hole[][] holes)
     {
+        instance.hasDataToWrite = true;
         string move = startingHole.Row.ToString() + "," + startingHole.Column.ToString()
             + " " + endingHole.Row.ToString() + "," + endingHole.Column.ToString()
             + " " + time.ToString() + " " ;
@@ -78,6 +81,10 @@ public class SaveDataManager : MonoBehaviour {
     }
     public static void SaveData()
     {
+        if (!instance.hasDataToWrite)
+        {
+            return;
+        }
         StreamWriter file = new StreamWriter(instance.fileName);
         file.Write(instance.builder);
         file.Close();

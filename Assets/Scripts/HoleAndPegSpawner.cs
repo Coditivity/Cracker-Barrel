@@ -370,11 +370,14 @@ public class HoleAndPegSpawner : MonoBehaviour
         
     }
 
+
+
     string[] loadedData;
     int[,] moves;
     int loadedDifficulty;
     MoveData[] moveDatas;
     bool[] lastHoleStatus;
+    float time;
     private void SpawnObjectsFromSaveData()
     {
         loadedData = SaveDataManager.GetLoadedData();
@@ -387,7 +390,7 @@ public class HoleAndPegSpawner : MonoBehaviour
             string[] datas = s.Split(new string[]{" "}
                 , System.StringSplitOptions.RemoveEmptyEntries);
             int[] start = new int[2], end = new int[2];
-            float time = 0;
+            time = 0;
             for (int i = 0; i < datas.Length;i++)
             {
                 string[] datas2 = datas[i].Split(new string[] { "," }
@@ -447,6 +450,7 @@ public class HoleAndPegSpawner : MonoBehaviour
 
     private void SetObjectsAccordingToSaveData()
     {
+        GameScript.sinceTime = time;
         int rowCount = getSideHoleCount();
         int k = 0;
         for (int i = 0; i < rowCount; i++)
