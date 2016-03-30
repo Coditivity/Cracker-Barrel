@@ -8,16 +8,17 @@ public class HoleAndPegSpawner : MonoBehaviour
     public GameObject MenuPanel, gameOverPanel, gameWinPanel;
     public GameObject[] cornerHoles;
     Hole[] holes;
-    Peg[] pegs;    
+    Peg[] pegs;
     Hole[][] holesRowColumn;
     public GameObject peg;
     static int difficulty = 0;
+    bool gameContinuing;
     public bool Spawned { get; private set; }
 
     // Use this for initialization
     void Start()
     {
-
+        gameContinuing = false;
         Spawned = false;
         gameOverPanel.SetActive(false);
         gameWinPanel.SetActive(false);
@@ -56,6 +57,7 @@ public class HoleAndPegSpawner : MonoBehaviour
     }
     public void ContinueClick()
     {
+        gameContinuing = true;
         SpawnObjects();
         MenuPanel.SetActive(false);
         SetObjectsAccordingToSaveData();
@@ -65,7 +67,7 @@ public class HoleAndPegSpawner : MonoBehaviour
     public void MenuClick()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        
+
     }
     private void SpawnObjects()
     {
@@ -113,19 +115,19 @@ public class HoleAndPegSpawner : MonoBehaviour
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
 
                 }
-                
 
-                    Vector3 pegPosition = holes[i].GetHole().transform.position;
-                    pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
-                    pegs[i] = new Peg(i, (GameObject)Instantiate(peg, pegPosition
-                        , peg.transform.rotation), holes[i]);
-                    if (i % 2 == 0)
-                    {
 
-                        pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
-                    }
-                
-                if(i==0)
+                Vector3 pegPosition = holes[i].GetHole().transform.position;
+                pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
+                pegs[i] = new Peg(i, (GameObject)Instantiate(peg, pegPosition
+                    , peg.transform.rotation), holes[i]);
+                if (i % 2 == 0)
+                {
+
+                    pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
+                }
+
+                if (i == 0 && !gameContinuing)
                 {
                     holes[i].Peg.Remove();
                     holes[i].hasPeg = false;
@@ -179,18 +181,18 @@ public class HoleAndPegSpawner : MonoBehaviour
                     hole.AddComponent<HoleAnimator>();
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
                 }
-                
 
-                    Vector3 pegPosition = holes[i].GetHole().transform.position;
-                    pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
-                    pegs[i] = new Peg(i, (GameObject)Instantiate(peg, pegPosition
-                        , peg.transform.rotation), holes[i]);
-                    if (i % 2 == 0)
-                    {
-                        pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
-                    }
-                
-                if(i==4)
+
+                Vector3 pegPosition = holes[i].GetHole().transform.position;
+                pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
+                pegs[i] = new Peg(i, (GameObject)Instantiate(peg, pegPosition
+                    , peg.transform.rotation), holes[i]);
+                if (i % 2 == 0)
+                {
+                    pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
+                }
+
+                if (i == 4 && !gameContinuing)
                 {
                     holes[i].Peg.Remove();
                     holes[i].hasPeg = false;
@@ -245,18 +247,18 @@ public class HoleAndPegSpawner : MonoBehaviour
                     hole.AddComponent<HoleAnimator>();
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
                 }
-                
 
-                    Vector3 pegPosition = holes[i].GetHole().transform.position;
-                    pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
-                    pegs[i] = new Peg(i, (GameObject)Instantiate(peg, pegPosition
-                        , peg.transform.rotation), holes[i]);
-                    if (i % 2 == 0)
-                    {
-                        pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
-                    }
-                
-                if(i==4)
+
+                Vector3 pegPosition = holes[i].GetHole().transform.position;
+                pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
+                pegs[i] = new Peg(i, (GameObject)Instantiate(peg, pegPosition
+                    , peg.transform.rotation), holes[i]);
+                if (i % 2 == 0)
+                {
+                    pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
+                }
+
+                if (i == 4 && !gameContinuing)
                 {
                     holes[i].Peg.Remove();
                     holes[i].hasPeg = false;
@@ -316,7 +318,7 @@ public class HoleAndPegSpawner : MonoBehaviour
         if (row >= 0 && row < numRows)
         {
             if (column >= 0 && column <= row)
-            {                
+            {
                 return holesRowColumn[row][column];
             }
         }
@@ -346,8 +348,9 @@ public class HoleAndPegSpawner : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         int holeCount = calculateHoleCount(getSideHoleCount());
-        if (Physics.Raycast(ray, out hit))        {            
-            
+        if (Physics.Raycast(ray, out hit))
+        {
+
             for (int i = 0; i < holeCount; i++)
             {
                 if (pegs[i] != null)
@@ -361,13 +364,13 @@ public class HoleAndPegSpawner : MonoBehaviour
                 {
                     if (!holes[i].hasPeg)
                     {
-                        
+
                         EventManager.OnHoleMouseDetection(holes[i]);
                     }
                 }
-            }                
+            }
         }
-        
+
     }
 
 
@@ -382,16 +385,16 @@ public class HoleAndPegSpawner : MonoBehaviour
     {
         loadedData = SaveDataManager.GetLoadedData();
         moveDatas = new MoveData[loadedData.Length];
-        
+
         int k = 0;
         foreach (string s in loadedData)
         {
-            
-            string[] datas = s.Split(new string[]{" "}
+
+            string[] datas = s.Split(new string[] { " " }
                 , System.StringSplitOptions.RemoveEmptyEntries);
             int[] start = new int[2], end = new int[2];
             time = 0;
-            for (int i = 0; i < datas.Length;i++)
+            for (int i = 0; i < datas.Length; i++)
             {
                 string[] datas2 = datas[i].Split(new string[] { "," }
                 , System.StringSplitOptions.RemoveEmptyEntries);
@@ -408,6 +411,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                 else if (i == 2)
                 {
                     time = float.Parse(datas2[0]);
+                    Debug.Log("loaded time " + time);
                 }
                 else
                 {
@@ -421,7 +425,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                         }
                     }
                 }
-                                
+
             }
             moveDatas[k] = new MoveData(start, end, time);
             k++;
@@ -460,6 +464,10 @@ public class HoleAndPegSpawner : MonoBehaviour
                 if (!lastHoleStatus[k])
                 {
                     GetHole(i, j).Peg.Remove();
+                }
+                else
+                {
+                  //  getHole(i,j).Pe
                 }
                 k++;
             }
