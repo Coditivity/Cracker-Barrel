@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameScript : MonoBehaviour {
 
+    public Text timeText;
     public HoleAndPegSpawner spawner;
     public GameObject dummyXPosObject;
     Hole[] movableHoles;
@@ -29,17 +31,20 @@ public class GameScript : MonoBehaviour {
 
     float sinceTime = 0;
 	// Update is called once per frame
-	void Update () {
-        sinceTime += Time.deltaTime;
+	void Update () {        
+        
         if (sinceTime >= 180)
         {
             spawner.GameOver();
             return;
         }
+       
         if (!spawner.Spawned)
         {
             return;
         }
+        sinceTime += Time.deltaTime;
+        timeText.text = (180 - sinceTime).ToString();
         if (Input.GetKeyDown(KeyCode.Escape))
         {
            
@@ -79,11 +84,7 @@ public class GameScript : MonoBehaviour {
         
   
 	}
-
-    private void IfPegMovable()
-    {
-
-    }
+        
 
     void OnRayHitDetection(Peg peg) {
         if (Input.GetMouseButtonDown(0))
@@ -117,8 +118,10 @@ public class GameScript : MonoBehaviour {
                         Debug.Log(h.ColliderName + " " + hole.ColliderName);
                         if (h.ColliderName == hole.ColliderName)
                         {
-                            RemoveMiddlePeg(selectedPeg.hole, hole);
+                            RemoveMiddlePeg(selectedPeg.hole, hole);                            
                             selectedPeg.MovePegToHole(hole);
+                            SaveDataManager.AddPlayerMove(selectedPeg.hole
+                                , hole, sinceTime, spawner.GetAllHoles());
                             selectedPeg = null;
                             break;
                         }

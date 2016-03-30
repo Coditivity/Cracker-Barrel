@@ -21,6 +21,10 @@ public class HoleAndPegSpawner : MonoBehaviour
         Spawned = false;
         gameOverPanel.SetActive(false);
         gameWinPanel.SetActive(false);
+        if (SaveDataManager.IsSaveDataAvailable())
+        {
+            SpawnObjectsFromSaveData();
+        }
     }
 
     public void GameOver()
@@ -49,6 +53,13 @@ public class HoleAndPegSpawner : MonoBehaviour
         difficulty = 2;
         SpawnObjects();
         MenuPanel.SetActive(false);
+    }
+    public void ContinueClick()
+    {
+        SpawnObjects();
+        MenuPanel.SetActive(false);
+        SetObjectsAccordingToSaveData();
+
     }
 
     public void MenuClick()
@@ -102,8 +113,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
 
                 }
-                if (i != 0)
-                {
+                
 
                     Vector3 pegPosition = holes[i].GetHole().transform.position;
                     pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
@@ -114,9 +124,10 @@ public class HoleAndPegSpawner : MonoBehaviour
 
                         pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
                     }
-                }
-                else
+                
+                if(i==0)
                 {
+                    holes[i].Peg.Remove();
                     holes[i].hasPeg = false;
                 }
 
@@ -168,8 +179,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                     hole.AddComponent<HoleAnimator>();
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
                 }
-                if (i != 4)
-                {
+                
 
                     Vector3 pegPosition = holes[i].GetHole().transform.position;
                     pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
@@ -179,9 +189,10 @@ public class HoleAndPegSpawner : MonoBehaviour
                     {
                         pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
                     }
-                }
-                else
+                
+                if(i==4)
                 {
+                    holes[i].Peg.Remove();
                     holes[i].hasPeg = false;
                 }
 
@@ -234,8 +245,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                     hole.AddComponent<HoleAnimator>();
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
                 }
-                if (i != 4)
-                {
+                
 
                     Vector3 pegPosition = holes[i].GetHole().transform.position;
                     pegPosition.z = holes[0].GetHole().transform.position.z + .5f;
@@ -245,9 +255,10 @@ public class HoleAndPegSpawner : MonoBehaviour
                     {
                         pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
                     }
-                }
-                else
+                
+                if(i==4)
                 {
+                    holes[i].Peg.Remove();
                     holes[i].hasPeg = false;
                 }
 
@@ -311,7 +322,10 @@ public class HoleAndPegSpawner : MonoBehaviour
         }
         return null;
     }
-
+    public Hole[][] GetAllHoles()
+    {
+        return holesRowColumn;
+    }
     public void RemovePeg(int pegIndex)
     {
         pegs[pegIndex].Remove();
@@ -352,6 +366,99 @@ public class HoleAndPegSpawner : MonoBehaviour
                     }
                 }
             }                
+        }
+        
+    }
+
+    string[] loadedData;
+    int[,] moves;
+    int loadedDifficulty;
+    MoveData[] moveDatas;
+    bool[] lastHoleStatus;
+    private void SpawnObjectsFromSaveData()
+    {
+        loadedData = SaveDataManager.GetLoadedData();
+        moveDatas = new MoveData[loadedData.Length];
+        
+        int k = 0;
+        foreach (string s in loadedData)
+        {
+            
+            string[] datas = s.Split(new string[]{" "}
+                , System.StringSplitOptions.RemoveEmptyEntries);
+            int[] start = new int[2], end = new int[2];
+            float time = 0;
+            for (int i = 0; i < datas.Length;i++)
+            {
+                string[] datas2 = datas[i].Split(new string[] { "," }
+                , System.StringSplitOptions.RemoveEmptyEntries);
+                if (i == 0)
+                {
+                    start[0] = int.Parse(datas2[0]);
+                    start[1] = int.Parse(datas2[0]);
+                }
+                else if (i == 1)
+                {
+                    end[0] = int.Parse(datas2[0]);
+                    end[1] = int.Parse(datas2[1]);
+                }
+                else if (i == 2)
+                {
+                    time = float.Parse(datas2[0]);
+                }
+                else
+                {
+                    if (datas2.Length > 0)
+                    {
+                        lastHoleStatus = new bool[datas2.Length];
+
+                        for (int b = 0; b < lastHoleStatus.Length; b++)
+                        {
+                            lastHoleStatus[b] = bool.Parse(datas2[b]);
+                        }
+                    }
+                }
+                                
+            }
+            moveDatas[k] = new MoveData(start, end, time);
+            k++;
+        }
+        if (lastHoleStatus != null)
+        {
+            int holeCountInSaveData = lastHoleStatus.Length - 1;
+            Debug.Log(holeCountInSaveData);
+            if (holeCountInSaveData == 9)
+            {
+                loadedDifficulty = 0;
+                difficulty = loadedDifficulty;
+            }
+            else if (holeCountInSaveData == 14)
+            {
+                loadedDifficulty = 1;
+                difficulty = loadedDifficulty;
+            }
+            else
+            {
+                loadedDifficulty = 2;
+                difficulty = loadedDifficulty;
+            }
+        }
+    }
+
+    private void SetObjectsAccordingToSaveData()
+    {
+        int rowCount = getSideHoleCount();
+        int k = 0;
+        for (int i = 0; i < rowCount; i++)
+        {
+            for (int j = 0; j < i + 1; j++)
+            {
+                if (!lastHoleStatus[k])
+                {
+                    GetHole(i, j).Peg.Remove();
+                }
+                k++;
+            }
         }
         
     }
