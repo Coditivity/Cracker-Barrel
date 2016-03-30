@@ -1,17 +1,21 @@
 fileFormatVersion: 2
-guid: 191771f517ada8c45af9025ef73c9319
-timeCreated: 1459258323
+guid: 48d4c4fddea61f7428613e84cfd95faf
+timeCreated: 1459357571
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cone
-    7400000: Default Take
-    9500000: //RootNode
+    100000: Camera
+    100002: Cylinder
+    100004: //RootNode
+    100006: Lamp
+    400000: Camera
+    400002: Cylinder
+    400004: //RootNode
+    400006: Lamp
+    2300000: Cylinder
+    3300000: Cylinder
+    4300000: Cylinder
   materials:
     importMaterials: 1
     materialName: 0
@@ -70,7 +74,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
