@@ -192,7 +192,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                     pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
                 }
 
-                if (i == 4 && !gameContinuing)
+                if (i == 0 && !gameContinuing)
                 {
                     holes[i].Peg.Remove();
                     holes[i].hasPeg = false;
@@ -258,7 +258,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                     pegs[i].GetPeg().GetComponent<Renderer>().material.color = Color.blue;
                 }
 
-                if (i == 4 && !gameContinuing)
+                if (i == 0 && !gameContinuing)
                 {
                     holes[i].Peg.Remove();
                     holes[i].hasPeg = false;

@@ -46,7 +46,7 @@ public class GameScript : MonoBehaviour {
         }
         sinceTime += Time.deltaTime;
         timeText.text = (180 - sinceTime).ToString();
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
         {
            
             if (selectedPeg != null)
@@ -54,6 +54,7 @@ public class GameScript : MonoBehaviour {
                 selectedPeg.MovePegToHole(selectedPeg.hole);
             }
         }
+
         int pegCount = spawner.getPegs().Length;
         Peg[] pegs = spawner.getPegs();
         bool movesLeft = false;
