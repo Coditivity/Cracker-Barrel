@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class GameScript : MonoBehaviour {
 
+    public GameObject panelHelp;
     public Text timeText;
     public HoleAndPegSpawner spawner;
     public GameObject dummyXPosObject;
@@ -30,6 +31,15 @@ public class GameScript : MonoBehaviour {
         sinceTime = 0;
 	}
 
+    public void OnClickHelp()
+    {
+        panelHelp.SetActive(true);
+    }
+
+    public void OnClickHelpClose()
+    {
+        panelHelp.SetActive(false);
+    }
     public static float sinceTime ;
 	// Update is called once per frame
 	void Update () {        
@@ -140,6 +150,7 @@ public class GameScript : MonoBehaviour {
 
    private bool TryGetViableMoves(Peg peg)
    {
+      
        movableHolesCount = 0;
        bool retVal = false;
        Hole hole = GetPegHole(peg);
@@ -208,7 +219,10 @@ public class GameScript : MonoBehaviour {
            {
                if (GetMiddleHole(startingHole, hole).hasPeg)
                {
-                   hole.StartAnimation();
+                    if (selectedPeg != null)
+                    {
+                        //hole.StartAnimation();
+                    }
                    return true;
                }
                
@@ -216,7 +230,7 @@ public class GameScript : MonoBehaviour {
        }
        if (hole != null)
        {
-           hole.StopAnimation();
+          // hole.StopAnimation();
        }
        return false;
    }

@@ -19,6 +19,7 @@ public class Hole  {
         this.Row = row;
         this.Column = column;
         holeAnimator = hole.GetComponent<HoleAnimator>();
+        holeAnimator.enabled = false;
         ColliderName = "HC" + row.ToString() + column.ToString();
         hole.GetComponent<Collider>().name = ColliderName;
     }
@@ -36,7 +37,7 @@ public class Hole  {
     }
     public void StopAnimation()
     {
-        //holeAnimator.enabled = false;
+        holeAnimator.enabled = false;
     }
 	
 }

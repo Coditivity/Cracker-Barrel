@@ -111,7 +111,7 @@ public class HoleAndPegSpawner : MonoBehaviour
 
                     GameObject hole = (GameObject)Instantiate(cornerHoles[0]
                         , holePosition, cornerHoles[0].transform.rotation);
-                    hole.AddComponent<HoleAnimator>();
+                    //hole.AddComponent<HoleAnimator>();
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
 
                 }
@@ -178,7 +178,7 @@ public class HoleAndPegSpawner : MonoBehaviour
                     Vector3 holePosition = new Vector3(xPosition, yPosition, cornerHoles[0].transform.position.z);
                     GameObject hole = (GameObject)Instantiate(cornerHoles[0]
                        , holePosition, cornerHoles[0].transform.rotation);
-                    hole.AddComponent<HoleAnimator>();
+                  //  hole.AddComponent<HoleAnimator>();
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
                 }
 
@@ -244,7 +244,7 @@ public class HoleAndPegSpawner : MonoBehaviour
 
                     GameObject hole = (GameObject)Instantiate(cornerHoles[0]
                        , holePosition, cornerHoles[0].transform.rotation);
-                    hole.AddComponent<HoleAnimator>();
+                  //  hole.AddComponent<HoleAnimator>();
                     holes[i] = new Hole(hole, true, getRowNumber(i), getColumnNumber(i));
                 }
 

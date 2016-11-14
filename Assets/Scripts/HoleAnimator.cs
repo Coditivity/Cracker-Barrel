@@ -3,15 +3,17 @@ using System.Collections;
 
 public class HoleAnimator : MonoBehaviour {
 
-    Material material;
+    //Material material;
     Color color;
-    float alpha;
+    float red;
+    Renderer _renderer;
 	// Use this for initialization
 	void Start () {
-        
-        material = GetComponent<Renderer>().material;
-        color = material.color;
-        alpha = color.a;
+
+        //material = GetComponent<Renderer>().material;
+        _renderer = GetComponent<Renderer>();
+        color = _renderer.material.color;
+        red = color.r;
 	}
 
 
@@ -19,20 +21,20 @@ public class HoleAnimator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        alpha -= .1f;// Time.deltaTime * 1 * sign;
-      /*  if (alpha >= 1)
+        red -= Time.deltaTime * 1 * sign;
+        if( red >= 1) 
         {
-            alpha = 1;
+            red = 1;
             sign *= -1; 
         }
-        else if (alpha <= .4f)
+        else if (red <= .4f)
         {
-            alpha = .4f;
+            red = .4f;
             sign *= -1;
-        }*/
+        }
 
-        color.a = alpha;
+        color.r = red;
 
-        material.color = color;
+        _renderer.material.color = color;
 	}
 }
